@@ -16,7 +16,6 @@
   "repository": "pelias/text-analyzer",
   "dependencies": {
     "addressit": "git://github.com/dianashk/addressit.git#temp",
-    "check-types": "^6.0.0",
     "extend": "^3.0.0",
     "lodash": "^4.11.1",
     "pelias-logger": "0.0.8"
