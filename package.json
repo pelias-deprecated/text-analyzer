@@ -1,0 +1,15 @@
+{
+  "name": "pelias-text-analyzer",
+  "version": "1.0.0",
+  "description": "Package that wraps several analysis techniques into one interface",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mapzen",
+  "license": "MIT",
+  "engines": {
+    "node": ">= 0.12.0"
+  },
+  "repository": "pelias/text-analyzer",
+}
