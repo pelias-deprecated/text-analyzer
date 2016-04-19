@@ -1,6 +1,6 @@
 {
   "name": "pelias-text-analyzer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Package that wraps several analysis techniques into one interface",
   "main": "index.js",
   "scripts": {
