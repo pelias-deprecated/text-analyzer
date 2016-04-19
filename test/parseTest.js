@@ -1,13 +1,9 @@
 var tape = require('tape');
 var parser = require('../src/parse');
 
-var type_mapping = require('../src/type_mapping');
-var layers_map = type_mapping.layer_mapping;
-
 tape('tests', function(test) {
   test.test('interface', function(t) {
     t.equal(typeof parser.parse, 'function', 'valid function');
-    t.equal(typeof parser.get_layers, 'function', 'valid function');
     t.end();
   });
 
@@ -33,22 +29,6 @@ tape('tests', function(test) {
       t.equal(typeof address, 'object', 'valid object');
       t.equal(address.name, query.name, 'name set correctly to ' + address.name);
       t.equal(address.admin_parts, query.admin_parts, 'admin_parts set correctly to ' + address.admin_parts);
-      t.end();
-    });
-  });
-
-  var chars_queries = ['a', 'bb', 'ccc'];
-  var num_queries   = ['1', '12', '123'];
-  var alphanum_q    = ['a1', '1a2', '12c'];
-
-  chars_queries.concat(num_queries).concat(alphanum_q).forEach(function(query) {
-    test.test('query length < 3 (' + query + ')', function(t) {
-      var address = parser.parse(query);
-      var target_layer = layers_map.coarse;
-      var layers = parser.get_layers(query);
-
-      t.equal(typeof address, 'object', 'valid object');
-      t.deepEqual(layers, target_layer, 'admin_parts set correctly to ' + target_layer.join(', '));
       t.end();
     });
   });

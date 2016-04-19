@@ -2,20 +2,8 @@ var parser     = require('addressit');
 var extend     = require('extend');
 var _          = require('lodash');
 var logger     = require('pelias-logger').get('api');
-var type_mapping = require('./type_mapping');
 
 var DELIM = ',';
-
-/*
- * For performance, and to prefer POI and admin records, express a preference
- * to only search coarse layers on very short text inputs.
- */
-module.exports.get_layers = function get_layers(query) {
-  if (query.length <= 3 ) {
-    // no address parsing required
-    return type_mapping.layer_mapping.coarse;
-  }
-};
 
 module.exports.parse = function parse(query) {
   var getAdminPartsBySplittingOnDelim = function(queryParts) {
