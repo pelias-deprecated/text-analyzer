@@ -1,1 +1,1 @@
-require ('./parseTest.js');
+require ('./libpostalParser.js');
