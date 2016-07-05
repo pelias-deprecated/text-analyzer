@@ -1,3 +1,18 @@
-var postal = require('node-postal');
+var logger     = require('pelias-logger').get('text-analyzer');
+var peliasConfig = require( 'pelias-config' ).generate();
 
-module.exports = require('./src/libpostalParser').create(postal.parser.parse_address);
+var text_analyzer = peliasConfig.api.textAnalyzer || 'addressit';
+
+// Changes to incorporate libpostal were made to minimize the impact to pelias-api
+// so exports cannot be a function to conditionally return an analyzer instance.
+// This can be changed when addressit goes away and libpostal has become the norm.
+if ('libpostal' === text_analyzer) {
+  var postal = require('node-postal');
+  module.exports = require('./src/libpostalParser').create(postal.parser.parse_address);
+}
+else if ('addressit' === text_analyzer) {
+  module.exports = require('./src/addressItParser');
+}
+else {
+  logger.error('unknown textAnalyzer value: ' + text_analyzer);
+}
