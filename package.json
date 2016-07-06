@@ -5,6 +5,7 @@
   "scripts": {
     "test": "node test/test | tap-dot",
     "lint": "jshint .",
+    "travis": "npm test",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "validate": "npm ls"
   },
