@@ -27,14 +27,16 @@ The `pelias-text-analyzer` npm module can be found here:
 
 This package is responsible for textually analyzing a single line input into it's constituent parts.  That is, the input `30 West 26th Street, New York, NY 10010` is parsed into:
 
-```{
+```
+{
   number: '30',
   street: 'west 26th street',
   city: 'new york',
   state: 'ny',
   postalcode: '10010',
   country: 'usa'
-}```
+}
+```
 
 The parsed form is used by the [https://npmjs.org/package/pelias-api](API) for more accurate searching and geocoding.
 
