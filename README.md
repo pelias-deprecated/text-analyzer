@@ -1,3 +1,12 @@
+> This repository is part of the [Pelias](https://github.com/pelias/pelias) project. Pelias is an open-source, open-data geocoder built by [Mapzen](https://www.mapzen.com/) that also powers [Mapzen Search](https://mapzen.com/projects/search). Our official user documentation is [here](https://mapzen.com/documentation/search/).
+
+# Pelias Text Analyzer
+
+![Travis CI Status](https://travis-ci.org/pelias/text-analyzer.svg)
+[![Gitter Chat](https://badges.gitter.im/pelias/pelias.svg)](https://gitter.im/pelias/pelias?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
+## Overview
+
 Module that performs analysis of a single line input for Pelias
 
 ## Installation
