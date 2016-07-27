@@ -21,14 +21,6 @@ tape('tests', function(test) {
 
   });
 
-  test.test('parse_address function that doesn\'t take at least 1 argument should throw exception', function(t) {
-    var errorMessage = /parse_address function must take at least 1 argument/;
-
-    t.throws(libpostalParser.create.bind(null, function() {}), errorMessage);
-    t.end();
-
-  });
-
   test.test('multiple values for component should use last value found', function(t) {
     var node_postal_mock = function(query) {
       t.equal(query, 'query value');
