@@ -60,6 +60,14 @@ var field_mapping = {
 // The Pelias query module is not concerned with unit.
 //
 module.exports.create = function create(parse_address) {
+  if (typeof parse_address !== 'function') {
+    throw 'parse_address parameter must be of type function';
+  }
+
+  if (parse_address.length === 0) {
+    throw 'parse_address function must take at least 1 argument';
+  }
+
   return {
     parse: function parse(query) {
       // call the parsing function (libpostal)

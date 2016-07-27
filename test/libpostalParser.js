@@ -3,9 +3,30 @@ var tape = require('tape');
 var libpostalParser = require('../src/libpostalParser');
 
 tape('tests', function(test) {
-  test.test('interface', function(t) {
-    t.equal(typeof libpostalParser.create, 'function', 'valid function');
+  // test.test('interface', function(t) {
+  //   t.equal(typeof libpostalParser.create, 'function', 'valid function');
+  //   t.end();
+  // });
+  //
+  test.test('attempting to pass a non-function to create should throw exception', function(t) {
+    var errorMessage = /parse_address parameter must be of type function/;
+
+    t.throws(libpostalParser.create.bind(null, {}), errorMessage);
+    t.throws(libpostalParser.create.bind(null, ''), errorMessage);
+    t.throws(libpostalParser.create.bind(null, 17), errorMessage);
+    t.throws(libpostalParser.create.bind(null, null), errorMessage);
+    t.throws(libpostalParser.create.bind(null, undefined), errorMessage);
+    t.throws(libpostalParser.create.bind(null, false), errorMessage);
     t.end();
+
+  });
+
+  test.test('parse_address function that doesn\'t take at least 1 argument should throw exception', function(t) {
+    var errorMessage = /parse_address function must take at least 1 argument/;
+
+    t.throws(libpostalParser.create.bind(null, function() {}), errorMessage);
+    t.end();
+
   });
 
   test.test('multiple values for component should use last value found', function(t) {
@@ -115,7 +136,7 @@ tape('tests', function(test) {
   test.test('unknown component names should not cause any adverse issues', function(t) {
     var node_postal_mock = function(query) {
       t.equal(query, 'query value');
-      
+
       return [
         {
           component: 'category',
