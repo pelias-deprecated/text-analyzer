@@ -38,7 +38,7 @@ This package is responsible for textually analyzing a single line input into it'
 }
 ```
 
-The parsed form is used by the [https://npmjs.org/package/pelias-api](API) for more accurate searching and geocoding.
+The parsed form is used by the [API](https://npmjs.org/package/pelias-api) for more accurate searching and geocoding.
 
 The point of this module isn't to hardwire Pelias to a certain text analyzer but to provide an interface for future work.  
 
@@ -62,3 +62,7 @@ Selection of AddressIt or libpostal is made using the Pelias configuration value
   }
 }
 ```
+
+To use the libpostal address parser, libpostal must be [installed](https://github.com/openvenues/libpostal/blob/master/README.md#installation) locally.  
+
+Even though this package supports libpostal, the [Pelias API](https://npmjs.org/package/pelias-api) does not yet support everything that libpostal returns.  We expect to fully support libpostal in the API by late August 2016.  
