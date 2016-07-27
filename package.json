@@ -2,6 +2,7 @@
   "name": "pelias-text-analyzer",
   "description": "Package that wraps several analysis techniques into one interface",
   "main": "index.js",
+  "version": "0.0.0-semantic-release",
   "scripts": {
     "test": "node test/test | tap-dot",
     "lint": "jshint .",
