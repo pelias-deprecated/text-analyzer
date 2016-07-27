@@ -61,7 +61,7 @@ var field_mapping = {
 //
 module.exports.create = function create(parse_address) {
   if (typeof parse_address !== 'function') {
-    throw 'parse_address parameter must be of type function';
+    throw new Error('parse_address parameter must be of type function');
   }
 
   return {
