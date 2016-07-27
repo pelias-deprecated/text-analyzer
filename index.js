@@ -1,4 +1,3 @@
-var logger     = require('pelias-logger').get('text-analyzer');
 var peliasConfig = require( 'pelias-config' ).generate();
 
 var text_analyzer = peliasConfig.api.textAnalyzer || 'addressit';
@@ -14,5 +13,5 @@ else if ('addressit' === text_analyzer) {
   module.exports = require('./src/addressItParser');
 }
 else {
-  logger.error('unknown textAnalyzer value: ' + text_analyzer);
+  throw 'Unsupported analyzer \'' + text_analyzer + '\', valid values are \'addressit\' and \'libpostal\'';
 }
