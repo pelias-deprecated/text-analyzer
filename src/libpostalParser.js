@@ -16,7 +16,49 @@ var field_mapping = {
 };
 
 // wrapper for libpostal that injects the actual parse function for easier
-// testing purposes
+// testing purposes.  `parse_address` is just a function that in the real world
+// calls libpostal and returns the parsed input.  It's injected since it's
+// libpostal is an external dependency and this pattern makes unit testing much
+// easier by effectively mocking out libpostal.  `parse_address` takes a single
+// string parameter to be parsed and returns an array of the form:
+//
+// ```
+// [
+//  {
+//    component: 'house_number',
+//    value: '30'
+//  },
+//  {
+//    component: 'road',
+//    value: 'west 26th street'
+//  },
+//  {
+//    component: 'city',
+//    value: 'new york'
+//  },
+//  {
+//    component: 'state',
+//    value: 'ny'
+//  }
+//]
+// ```
+//
+// where `component` can be any of (currently):
+// - house (generally interpreted as unknown, treated by pelias like a query term)
+// - category (like "restaurants")
+// - house_number
+// - road
+// - unit (apt or suite #)
+// - suburb (like a neighbourhood)
+// - city
+// - city_district (like an NYC borough)
+// - state_district (like a county)
+// - state
+// - postcode
+// - country
+//
+// The Pelias query module is not concerned with unit.
+//
 module.exports.create = function create(parse_address) {
   return {
     parse: function parse(query) {
