@@ -1,5 +1,5 @@
 var tape = require('tape');
-var parser = require('../src/parse');
+var parser = require('../src/addressItParser');
 
 tape('tests', function(test) {
   test.test('interface', function(t) {
