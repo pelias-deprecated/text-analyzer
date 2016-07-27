@@ -13,5 +13,5 @@ else if ('addressit' === text_analyzer) {
   module.exports = require('./src/addressItParser');
 }
 else {
-  throw 'Unsupported analyzer \'' + text_analyzer + '\', valid values are \'addressit\' and \'libpostal\'';
+  throw new Error('Unsupported analyzer \'' + text_analyzer + '\', valid values are \'addressit\' and \'libpostal\'');
 }
