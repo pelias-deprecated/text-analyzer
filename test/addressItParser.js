@@ -54,11 +54,20 @@ tape('tests', function(test) {
     t.end();
   });
   test.test('query with many tokens', function(t) {
-    var address = parser.parse('main particle new york');
+    var address = parser.parse('main particle new land');
     t.equal(address, null, 'nothing address specific detected');
     t.end();
   });
 
+  test.test('valid city with multiword state', function(t) {
+    var query_string = 'buffalo new york';
+    var address = parser.parse(query_string);
+
+    t.equal(typeof address, 'object', 'valid object for the address');
+    t.deepEqual(address.regions, ['buffalo'], 'parsed city');
+    t.equal(address.state , 'NY', 'parsed state');
+    t.end();
+  });
   test.test('valid address, house number', function(t) {
     var query_string = '123 main st new york ny';
     var address = parser.parse(query_string);
