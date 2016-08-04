@@ -54,7 +54,7 @@ tape('tests', function(test) {
     t.end();
   });
   test.test('query with many tokens', function(t) {
-    var address = parser.parse('main particle new york');
+    var address = parser.parse('main particle new land');
     t.equal(address, null, 'nothing address specific detected');
     t.end();
   });
