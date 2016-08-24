@@ -3,41 +3,41 @@ var extend = require('extend');
 var _      = require('lodash');
 var logger = require('pelias-logger').get('text-analyzer');
 
-var DELIM = ',';
+function getAdminPartsBySplittingOnDelim(queryParts, delim) {
+  // naive approach - for admin matching during query time
+  // split 'flatiron, new york, ny' into 'flatiron' and 'new york, ny'
 
-module.exports.parse = function parse(query) {
-  var getAdminPartsBySplittingOnDelim = function(queryParts) {
-    // naive approach - for admin matching during query time
-    // split 'flatiron, new york, ny' into 'flatiron' and 'new york, ny'
+  var address = {};
 
-    var address = {};
+  if (queryParts.length > 1) {
+    address.name = queryParts[0].trim();
 
-    if (queryParts.length > 1) {
-      address.name = queryParts[0].trim();
+    // 1. slice away all parts after the first one
+    // 2. trim spaces from each part just in case
+    // 3. join the parts back together with appropriate delimiter and spacing
+    address.admin_parts = queryParts.slice(1)
+                              .map(function (part) { return part.trim(); })
+                              .join(delim + ' ');
+  }
 
-      // 1. slice away all parts after the first one
-      // 2. trim spaces from each part just in case
-      // 3. join the parts back together with appropriate delimiter and spacing
-      address.admin_parts = queryParts.slice(1)
-                                .map(function (part) { return part.trim(); })
-                                .join(DELIM + ' ');
-    }
+  return address;
+}
 
-    return address;
-  };
+function getAddressParts(query) {
+  // perform full address parsing
+  // except on queries so short they obviously can't contain an address
+  if (query.length > 3) {
+    return parser( query );
+  }
+}
 
-  var getAddressParts = function(query) {
-    // perform full address parsing
-    // except on queries so short they obviously can't contain an address
-    if (query.length > 3) {
-      return parser( query );
-    }
-  };
+function parse(query) {
+  var delim = ',';
 
-  var queryParts = query.split(DELIM);
+  var queryParts = query.split(delim);
 
-  var addressWithAdminParts  = getAdminPartsBySplittingOnDelim(queryParts);
-  var addressWithAddressParts= getAddressParts(queryParts.join(DELIM + ' '));
+  var addressWithAdminParts  = getAdminPartsBySplittingOnDelim(queryParts, delim);
+  var addressWithAddressParts= getAddressParts(queryParts.join(delim + ' '));
 
   var parsedAddress  = extend(addressWithAdminParts,
                               addressWithAddressParts);
@@ -70,4 +70,6 @@ module.exports.parse = function parse(query) {
 
   return parsed_text;
 
-};
+}
+
+module.exports.parse = parse;
