@@ -95,8 +95,6 @@ tape('tests', function(test) {
     var query_string = '339 W Main St, Cheshire, 06410';
     var address = parser.parse(query_string);
 
-    console.log(address);
-
     t.equal(typeof address, 'object', 'valid object for the address');
     t.equal(address.street, 'W Main St', 'parsed street');
     t.deepEqual(address.regions, ['Cheshire'], 'parsed city');
