@@ -7,7 +7,7 @@
 
 ## Overview
 
-Module that performs analysis of a single line input for Pelias
+Module that performs analysis of a single line of input describing a location, breaking into its constituent parts (street, city, state, country, etc).
 
 ## Installation
 
