@@ -24,7 +24,7 @@
     "extend": "^3.0.0",
     "lodash": "^4.14.0",
     "node-postal": "0.3.0",
-    "pelias-config": "2.1.0",
+    "pelias-config": "2.2.0",
     "pelias-logger": "0.0.8"
   },
   "devDependencies": {
