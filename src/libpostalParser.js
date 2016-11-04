@@ -2,6 +2,7 @@ var logger = require('pelias-logger').get('text-analyzer');
 
 // mapping object from libpostal fields to pelias fields
 var field_mapping = {
+  island:         'island',
   category:       'category',
   house:          'query',
   house_number:   'number',
