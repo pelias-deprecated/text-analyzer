@@ -56,6 +56,10 @@ tape('tests', function(test) {
 
       return [
         {
+          component: 'island',
+          value: 'island value'
+        },
+        {
           component: 'category',
           value: 'category value'
         },
@@ -107,6 +111,7 @@ tape('tests', function(test) {
     var actual = parser.parse('query value');
 
     var expected = {
+      island: 'island value',
       category: 'category value',
       query: 'house value',
       number: 'house_number value',
