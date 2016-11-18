@@ -130,6 +130,17 @@ tape('tests', function(test) {
 
   });
 
+  test.test('query with diacriticals should be deburred', function(t) {
+    var parser = libpostalParser.create((query) => {
+      t.equal(query, 'query value');
+      t.end();
+      return [];
+    });
+
+    var actual = parser.parse('q́ŭér̂ÿ v̆àl̂ū́ë');
+
+  });
+
   test.test('unknown component names should not cause any adverse issues', function(t) {
     var node_postal_mock = function(query) {
       t.equal(query, 'query value');

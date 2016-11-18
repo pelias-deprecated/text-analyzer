@@ -1,4 +1,5 @@
 var logger = require('pelias-logger').get('text-analyzer');
+var _ = require('lodash');
 
 // mapping object from libpostal fields to pelias fields
 var field_mapping = {
@@ -68,7 +69,7 @@ module.exports.create = function create(parse_address) {
   return {
     parse: function parse(query) {
       // call the parsing function (libpostal)
-      var parsed = parse_address(query);
+      var parsed = parse_address(_.deburr(query));
 
       logger.debug('libpostal raw: ' + JSON.stringify(parsed, null, 2));
 
