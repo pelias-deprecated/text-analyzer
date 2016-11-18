@@ -130,33 +130,14 @@ tape('tests', function(test) {
 
   });
 
-  test.test('all known values should be adapted to pelias model', function(t) {
-    var node_postal_mock = function(query) {
+  test.test('query with diacriticals should be deburred', function(t) {
+    var parser = libpostalParser.create((query) => {
       t.equal(query, 'query value');
+      t.end();
+      return [];
+    });
 
-      return [
-        {
-          component: 'city',
-          value: 'city value'
-        },
-        {
-          component: 'state',
-          value: 'state value'
-        }
-      ];
-    };
-
-    var parser = libpostalParser.create(node_postal_mock);
-
-    var actual = parser.parse('quéry vàlue');
-
-    var expected = {
-      city: 'city value',
-      state: 'state value'
-    };
-
-    t.deepEqual(actual, expected);
-    t.end();
+    var actual = parser.parse('q́ŭér̂ÿ v̆àl̂ū́ë');
 
   });
 
