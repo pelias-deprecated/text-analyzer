@@ -130,6 +130,36 @@ tape('tests', function(test) {
 
   });
 
+  test.test('all known values should be adapted to pelias model', function(t) {
+    var node_postal_mock = function(query) {
+      t.equal(query, 'query value');
+
+      return [
+        {
+          component: 'city',
+          value: 'city value'
+        },
+        {
+          component: 'state',
+          value: 'state value'
+        }
+      ];
+    };
+
+    var parser = libpostalParser.create(node_postal_mock);
+
+    var actual = parser.parse('quéry vàlue');
+
+    var expected = {
+      city: 'city value',
+      state: 'state value'
+    };
+
+    t.deepEqual(actual, expected);
+    t.end();
+
+  });
+
   test.test('unknown component names should not cause any adverse issues', function(t) {
     var node_postal_mock = function(query) {
       t.equal(query, 'query value');
