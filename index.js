@@ -6,6 +6,7 @@ var text_analyzer = peliasConfig.api.textAnalyzer || 'addressit';
 // so exports cannot be a function to conditionally return an analyzer instance.
 // This can be changed when addressit goes away and libpostal has become the norm.
 if ('libpostal' === text_analyzer) {
+  console.log('loading libpostal data, this may take a few seconds...');
   var postal = require('node-postal');
   module.exports = require('./src/libpostalParser').create(postal.parser.parse_address);
 }
