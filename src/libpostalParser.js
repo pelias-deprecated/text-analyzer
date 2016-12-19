@@ -61,17 +61,35 @@ var field_mapping = {
 //
 // The Pelias query module is not concerned with unit.
 //
-module.exports.create = function create(parse_address) {
-  if (typeof parse_address !== 'function') {
-    throw new Error('parse_address parameter must be of type function');
+module.exports.create = function create(postal) {
+  if (!postal || typeof postal !== 'object') {
+    throw new Error('postal parameter must be of type object');
   }
 
+  if (!postal.parser || typeof postal.parser.parse_address !== 'function') {
+    throw new Error('postal.parser.parse_address parameter must be of type function');
+  }
+
+  if (!postal.expand || typeof postal.expand.expand_address !== 'function') {
+    throw new Error('postal.expand.expand_address must be of type function');
+  }
+
+
   return {
+    expand: function expand(query) {
+      // call the expand function (libpostal)
+      var expanded = postal.expand.expand_address(query);
+
+      logger.debug('libpostal expanded: ' + JSON.stringify(expanded, null, 2));
+
+      return expanded;
+
+    },
     parse: function parse(query) {
       // call the parsing function (libpostal)
-      var parsed = parse_address(_.deburr(query));
+      var parsed = postal.parser.parse_address(_.deburr(query));
 
-      logger.debug('libpostal raw: ' + JSON.stringify(parsed, null, 2));
+      logger.debug('libpostal parse raw: ' + JSON.stringify(parsed, null, 2));
 
       // convert the libpostal input into something that pelias understands
       var o = parsed.reduce(function(o, f) {
@@ -82,7 +100,7 @@ module.exports.create = function create(parse_address) {
         return o;
       }, {});
 
-      logger.debug('converted: ' + JSON.stringify(o, null, 2));
+      logger.debug('libpostal converted: ' + JSON.stringify(o, null, 2));
 
       return o;
 

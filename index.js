@@ -8,7 +8,7 @@ var text_analyzer = peliasConfig.api.textAnalyzer || 'addressit';
 if ('libpostal' === text_analyzer) {
   console.log('loading libpostal data, this may take a few seconds...');
   var postal = require('node-postal');
-  module.exports = require('./src/libpostalParser').create(postal.parser.parse_address);
+  module.exports = require('./src/libpostalParser').create(postal);
 }
 else if ('addressit' === text_analyzer) {
   module.exports = require('./src/addressItParser');
