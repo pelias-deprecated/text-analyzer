@@ -1,30 +1,27 @@
 var tape = require('tape');
 var proxyquire =  require('proxyquire').noCallThru();
 
-tape('tests', function(test) {
-  test.test('erroneous textAnalyser config should throw error', function(t) {
+tape('entry point tests', function(test) {
+  test.test('configValidation throwing error should exit for require\' a parser', function(t) {
     t.throws(function() {
+      // since src/addressItParser returns a function, invoke to make sure addressit
+      // was not require'd as the error should be thrown before a function is returned.
+      // that is, configValidation should skip require'ing any parser
       proxyquire('../index', {
-        'pelias-config': { generate: function() {
-          return { api: { textAnalyser: 'bad key' } };
+        './src/configValidation': {
+          validate: () => {
+            throw Error('config is not valid');
+          }
+        },
+        './src/addressItParser': () => { throw Error('should not have been called'); },
+        'pelias-config': {
+          generate: () => {
+            return { api: { textAnalyzer: 'addressit' } };
+          }
         }
-      }});
+      })();
 
-    }, /"textAnalyser" is not allowed/);
-
-    t.end();
-
-  });
-
-  test.test('non-libpostal/addressit textAnalyzer should throw error', function(t) {
-    t.throws(function() {
-      proxyquire('../index', {
-        'pelias-config': { generate: function() {
-          return { api: { textAnalyzer: 'non-libpostal/addressit textAnalyzer' } };
-        }
-      }});
-
-    }, /"textAnalyzer" must be one of \[libpostal, addressit\]/);
+    }, /config is not valid/);
 
     t.end();
 
@@ -32,11 +29,18 @@ tape('tests', function(test) {
 
   test.test('addressit textAnalyzer should return addressit textAnalyzer', function(t) {
     const textAnalyzer = proxyquire('../index', {
+      './src/configValidation': {
+        validate: () => {
+          return true;
+        }
+      },
       './src/addressItParser': 'addressit',
-      'pelias-config': { generate: function() {
-        return { api: { textAnalyzer: 'addressit' } };
+      'pelias-config': {
+        generate: () => {
+          return { api: { textAnalyzer: 'addressit' } };
+        }
       }
-    }});
+    });
 
     t.equals(textAnalyzer, 'addressit');
     t.end();
@@ -45,17 +49,22 @@ tape('tests', function(test) {
 
   test.test('addressit textAnalyzer should return addressit textAnalyzer', function(t) {
     const textAnalyzer = proxyquire('../index', {
+      './src/configValidation': {
+        validate: () => {
+          return true;
+        }
+      },
       'node-postal': {
         parser: {
-          parse_address: function(){}
+          parse_address: () => {}
         }
       },
       './src/libpostalParser': {
-        create: function() {
+        create: () => {
           return 'libpostal';
         }
       },
-      'pelias-config': { generate: function() {
+      'pelias-config': { generate: () => {
         return { api: { textAnalyzer: 'libpostal' } };
       }
     }});

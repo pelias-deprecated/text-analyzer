@@ -4,15 +4,8 @@ const Joi = require('joi');
 
 var peliasConfig = require( 'pelias-config' ).generate();
 
-const schema = Joi.object().keys({
-  textAnalyzer: Joi.string().default('addressit').valid('libpostal', 'addressit')
-}).invalid('textAnalyser');
-
-Joi.validate(peliasConfig.api, schema, (err, value) => {
-  if (err) {
-    throw new Error(err.details[0].message);
-  }
-});
+// validate the WOF importer configuration before continuing
+require('./src/configValidation').validate(peliasConfig.api);
 
 // Changes to incorporate libpostal were made to minimize the impact to pelias-api
 // so exports cannot be a function to conditionally return an analyzer instance.

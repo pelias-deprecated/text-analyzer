@@ -8,6 +8,7 @@ require( 'pelias-config' )
   .generate()
   .deepMerge(warnLogger);
 
-// require ('./libpostalParser.js');
-// require ('./addressItParser.js');
+require ('./libpostalParser.js');
+require ('./addressItParser.js');
+require ('./configValidationTest.js');
 require ('./index.js');
