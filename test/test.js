@@ -10,5 +10,5 @@ require( 'pelias-config' )
 
 require ('./libpostalParser.js');
 require ('./addressItParser.js');
-require ('./configValidationTest.js');
+require ('./schemaTest.js');
 require ('./index.js');
