@@ -1,22 +1,19 @@
-var tape = require('tape');
-var proxyquire =  require('proxyquire').noCallThru();
+const tape = require('tape');
+const proxyquire =  require('proxyquire').noCallThru();
 
-tape('entry point tests', function(test) {
-  test.test('configValidation throwing error should exit for require\' a parser', function(t) {
-    t.throws(function() {
+tape('entry point tests', (test) => {
+  test.test('generate throwing error should exit before require\'ing a parser', (t) => {
+    t.throws(() => {
       // since src/addressItParser returns a function, invoke to make sure addressit
       // was not require'd as the error should be thrown before a function is returned.
       // that is, configValidation should skip require'ing any parser
       proxyquire('../index', {
-        './src/configValidation': {
-          validate: () => {
-            throw Error('config is not valid');
-          }
-        },
+        './schema': 'this is the schema',
         './src/addressItParser': () => { throw Error('should not have been called'); },
         'pelias-config': {
-          generate: () => {
-            return { api: { textAnalyzer: 'addressit' } };
+          generate: (schema) => {
+            t.equals(schema, 'this is the schema');
+            throw Error('config is not valid');
           }
         }
       })();
@@ -27,16 +24,13 @@ tape('entry point tests', function(test) {
 
   });
 
-  test.test('addressit textAnalyzer should return addressit textAnalyzer', function(t) {
+  test.test('addressit textAnalyzer should return addressit textAnalyzer', (t) => {
     const textAnalyzer = proxyquire('../index', {
-      './src/configValidation': {
-        validate: () => {
-          return true;
-        }
-      },
+      './schema': 'this is the schema',
       './src/addressItParser': 'addressit',
       'pelias-config': {
-        generate: () => {
+        generate: (schema) => {
+          t.equals(schema, 'this is the schema');
           return { api: { textAnalyzer: 'addressit' } };
         }
       }
@@ -47,13 +41,9 @@ tape('entry point tests', function(test) {
 
   });
 
-  test.test('addressit textAnalyzer should return addressit textAnalyzer', function(t) {
+  test.test('addressit textAnalyzer should return addressit textAnalyzer', (t) => {
     const textAnalyzer = proxyquire('../index', {
-      './src/configValidation': {
-        validate: () => {
-          return true;
-        }
-      },
+      './schema': 'this is the schema',
       'node-postal': {
         parser: {
           parse_address: () => {}
@@ -64,7 +54,8 @@ tape('entry point tests', function(test) {
           return 'libpostal';
         }
       },
-      'pelias-config': { generate: () => {
+      'pelias-config': { generate: (schema) => {
+        t.equals(schema, 'this is the schema');
         return { api: { textAnalyzer: 'libpostal' } };
       }
     }});
