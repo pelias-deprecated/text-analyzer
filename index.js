@@ -1,7 +1,5 @@
 'use strict';
 
-const Joi = require('joi');
-
 // validate the WOF importer configuration before continuing
 const peliasConfig = require( 'pelias-config' ).generate(require('./schema'));
 
