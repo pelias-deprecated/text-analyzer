@@ -6,6 +6,7 @@ const Joi = require('joi');
 // textAnalyser is explicitly invalid
 module.exports = Joi.object().keys({
   api: Joi.object().keys({
-    textAnalyzer: Joi.string().default('addressit').valid('libpostal', 'addressit')
-  }).invalid('textAnalyser')
+    textAnalyzer: Joi.string().default('addressit').valid('libpostal', 'addressit'),
+    textAnalyser: Joi.any().forbidden()
+  }).unknown(true)
 }).requiredKeys('api').unknown(true);
