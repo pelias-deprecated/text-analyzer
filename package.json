@@ -6,9 +6,10 @@
   "scripts": {
     "test": "node test/test | tap-dot",
     "lint": "jshint .",
-    "travis": "npm test",
+    "travis": "npm run check-dependencies && npm test",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "validate": "npm ls"
+    "validate": "npm ls",
+    "check-dependencies": "node_modules/.bin/npm-check --production"
   },
   "author": "Mapzen",
   "license": "MIT",
@@ -39,6 +40,7 @@
   "pre-commit": [
     "lint",
     "validate",
-    "test"
+    "test",
+    "check-dependencies"
   ]
 }
