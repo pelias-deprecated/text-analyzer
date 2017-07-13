@@ -66,8 +66,6 @@ module.exports.create = function create(parse_address) {
     throw new Error('parse_address parameter must be of type function');
   }
 
-  // return undefined if something is wrong with the libpostal response (2 roads, etc)
-
   return {
     parse: function parse(query) {
       // call the parsing function (libpostal)
