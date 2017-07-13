@@ -21,35 +21,6 @@ tape('tests', function(test) {
 
   });
 
-  test.test('multiple values for component should use last value found', function(t) {
-    var node_postal_mock = function(query) {
-      t.equal(query, 'query value');
-
-      return [
-        {
-          component: 'category',
-          value: 'value 1'
-        },
-        {
-          component: 'category',
-          value: 'value 2'
-        }
-      ];
-    };
-
-    var parser = libpostalParser.create(node_postal_mock);
-
-    var actual = parser.parse('query value');
-
-    var expected = {
-      category: 'value 2'
-    };
-
-    t.deepEqual(actual, expected);
-    t.end();
-
-  });
-
   test.test('all known values should be adapted to pelias model', function(t) {
     var node_postal_mock = function(query) {
       t.equal(query, 'query value');
@@ -167,6 +138,34 @@ tape('tests', function(test) {
 
     t.deepEqual(actual, expected);
     t.end();
+
+  });
+
+  test.test('libpostal returning 2 or more of a component should return undefined', t => {
+    t.plan(2);
+
+    const parser = libpostalParser.create(query => {
+      t.equal(query, 'query value');
+
+      return [
+        {
+          component: 'road',
+          value: 'road value 1'
+        },
+        {
+          component: 'city',
+          value: 'city value'
+        },
+        {
+          component: 'road',
+          value: 'road value 2'
+        }
+      ];
+    });
+
+    const actual = parser.parse('query value');
+
+    t.equals(actual, undefined, 'libpostal response should be considerd invalid');
 
   });
 

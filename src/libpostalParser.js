@@ -66,12 +66,21 @@ module.exports.create = function create(parse_address) {
     throw new Error('parse_address parameter must be of type function');
   }
 
+  // return undefined if something is wrong with the libpostal response (2 roads, etc)
+
   return {
     parse: function parse(query) {
       // call the parsing function (libpostal)
       var parsed = parse_address(_.deburr(query));
 
       logger.debug('libpostal raw: ' + JSON.stringify(parsed, null, 2));
+
+      // if any field is represented more than once in the libpostal response, treat it as invalid
+      //  and return undefined
+      // _.countBy creates a histogram from parsed, eg: { "road": 2, "city": 1 }
+      if (_.some(_.countBy(parsed, o => o.component), count => count > 1)) {
+        return undefined;
+      }
 
       // convert the libpostal input into something that pelias understands
       var o = parsed.reduce(function(o, f) {
