@@ -1,6 +1,8 @@
 var tape = require('tape');
 
 var libpostalParser = require('../src/libpostalParser');
+const proxyquire = require('proxyquire').noCallThru();
+const mock_logger = require('pelias-mock-logger');
 
 tape('tests', function(test) {
   // test.test('interface', function(t) {
@@ -141,10 +143,13 @@ tape('tests', function(test) {
 
   });
 
-  test.test('libpostal returning 2 or more of a component should return undefined', t => {
-    t.plan(2);
+  test.test('libpostal returning 2 or more of a component should return undefined and log message', t => {
+    // plan so it's known that the injected parse function was called
+    t.plan(3);
 
-    const parser = libpostalParser.create(query => {
+    const logger = mock_logger();
+
+    const parse_address = query => {
       t.equal(query, 'query value');
 
       return [
@@ -161,10 +166,15 @@ tape('tests', function(test) {
           value: 'road value 2'
         }
       ];
-    });
+    };
+
+    const parser = proxyquire('../src/libpostalParser', {
+      'pelias-logger': logger
+    }).create(parse_address);
 
     const actual = parser.parse('query value');
 
+    t.ok(logger.isWarnMessage('discarding libpostal parse of \'query value\' due to duplicate field assignments'));
     t.equals(actual, undefined, 'libpostal response should be considerd invalid');
 
   });

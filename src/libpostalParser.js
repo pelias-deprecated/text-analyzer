@@ -77,6 +77,7 @@ module.exports.create = function create(parse_address) {
       //  and return undefined
       // _.countBy creates a histogram from parsed, eg: { "road": 2, "city": 1 }
       if (_.some(_.countBy(parsed, o => o.component), count => count > 1)) {
+        logger.warn(`discarding libpostal parse of '${query}' due to duplicate field assignments`);
         return undefined;
       }
 
