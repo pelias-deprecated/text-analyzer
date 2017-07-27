@@ -73,6 +73,14 @@ module.exports.create = function create(parse_address) {
 
       logger.debug('libpostal raw: ' + JSON.stringify(parsed, null, 2));
 
+      // if any field is represented more than once in the libpostal response, treat it as invalid
+      //  and return undefined
+      // _.countBy creates a histogram from parsed, eg: { "road": 2, "city": 1 }
+      if (_.some(_.countBy(parsed, o => o.component), count => count > 1)) {
+        logger.warn(`discarding libpostal parse of '${query}' due to duplicate field assignments`);
+        return undefined;
+      }
+
       // convert the libpostal input into something that pelias understands
       var o = parsed.reduce(function(o, f) {
         if (field_mapping.hasOwnProperty(f.component)) {

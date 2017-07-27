@@ -1,6 +1,8 @@
 var tape = require('tape');
 
 var libpostalParser = require('../src/libpostalParser');
+const proxyquire = require('proxyquire').noCallThru();
+const mock_logger = require('pelias-mock-logger');
 
 tape('tests', function(test) {
   // test.test('interface', function(t) {
@@ -17,35 +19,6 @@ tape('tests', function(test) {
     t.throws(libpostalParser.create.bind(null, null), errorMessage);
     t.throws(libpostalParser.create.bind(null, undefined), errorMessage);
     t.throws(libpostalParser.create.bind(null, false), errorMessage);
-    t.end();
-
-  });
-
-  test.test('multiple values for component should use last value found', function(t) {
-    var node_postal_mock = function(query) {
-      t.equal(query, 'query value');
-
-      return [
-        {
-          component: 'category',
-          value: 'value 1'
-        },
-        {
-          component: 'category',
-          value: 'value 2'
-        }
-      ];
-    };
-
-    var parser = libpostalParser.create(node_postal_mock);
-
-    var actual = parser.parse('query value');
-
-    var expected = {
-      category: 'value 2'
-    };
-
-    t.deepEqual(actual, expected);
     t.end();
 
   });
@@ -167,6 +140,42 @@ tape('tests', function(test) {
 
     t.deepEqual(actual, expected);
     t.end();
+
+  });
+
+  test.test('libpostal returning 2 or more of a component should return undefined and log message', t => {
+    // plan so it's known that the injected parse function was called
+    t.plan(3);
+
+    const logger = mock_logger();
+
+    const parse_address = query => {
+      t.equal(query, 'query value');
+
+      return [
+        {
+          component: 'road',
+          value: 'road value 1'
+        },
+        {
+          component: 'city',
+          value: 'city value'
+        },
+        {
+          component: 'road',
+          value: 'road value 2'
+        }
+      ];
+    };
+
+    const parser = proxyquire('../src/libpostalParser', {
+      'pelias-logger': logger
+    }).create(parse_address);
+
+    const actual = parser.parse('query value');
+
+    t.ok(logger.isWarnMessage('discarding libpostal parse of \'query value\' due to duplicate field assignments'));
+    t.equals(actual, undefined, 'libpostal response should be considerd invalid');
 
   });
 
