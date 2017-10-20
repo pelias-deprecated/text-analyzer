@@ -1,5 +1,4 @@
 var parser = require('addressit');
-var extend = require('extend');
 var _      = require('lodash');
 var logger = require('pelias-logger').get('text-analyzer');
 
@@ -39,7 +38,7 @@ function parse(query) {
   var addressWithAdminParts  = getAdminPartsBySplittingOnDelim(queryParts, delim);
   var addressWithAddressParts= getAddressParts(queryParts.join(delim + ' '));
 
-  var parsedAddress  = extend(addressWithAdminParts,
+  var parsedAddress  = _.extend(addressWithAdminParts,
                               addressWithAddressParts);
 
   var address_parts  =  [ 'name',
