@@ -6,6 +6,7 @@ var field_mapping = {
   island:         'island',
   category:       'category',
   house:          'query',
+  unit:           'unit',
   house_number:   'number',
   road:           'street',
   suburb:         'neighbourhood',
