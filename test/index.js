@@ -49,11 +49,7 @@ tape('entry point tests', (test) => {
           parse_address: () => {}
         }
       },
-      './src/libpostalParser': {
-        create: () => {
-          return 'libpostal';
-        }
-      },
+      './src/libpostalParser': 'libpostal',
       'pelias-config': { generate: (schema) => {
         t.equals(schema, 'this is the schema');
         return { api: { textAnalyzer: 'libpostal' } };

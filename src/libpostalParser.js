@@ -1,8 +1,10 @@
-var logger = require('pelias-logger').get('text-analyzer');
-var _ = require('lodash');
+const logger = require('pelias-logger').get('text-analyzer');
+const _ = require('lodash');
+
+const parse_address = require('node-postal').parser.parse_address;
 
 // mapping object from libpostal fields to pelias fields
-var field_mapping = {
+const field_mapping = {
   island:         'island',
   category:       'category',
   house:          'query',
@@ -61,40 +63,34 @@ var field_mapping = {
 //
 // The Pelias query module is not concerned with unit.
 //
-module.exports.create = function create(parse_address) {
-  if (typeof parse_address !== 'function') {
-    throw new Error('parse_address parameter must be of type function');
-  }
+module.exports = {
+  parse: function parse(query) {
+    // call the parsing function (libpostal)
+    const parsed = parse_address(_.deburr(query));
 
-  return {
-    parse: function parse(query) {
-      // call the parsing function (libpostal)
-      var parsed = parse_address(_.deburr(query));
+    logger.debug('libpostal raw: ' + JSON.stringify(parsed, null, 2));
 
-      logger.debug('libpostal raw: ' + JSON.stringify(parsed, null, 2));
+    // if any field is represented more than once in the libpostal response, treat it as invalid
+    //  and return undefined
+    // _.countBy creates a histogram from parsed, eg: { "road": 2, "city": 1 }
+    if (_.some(_.countBy(parsed, o => o.component), count => count > 1)) {
+      logger.warn(`discarding libpostal parse of '${query}' due to duplicate field assignments`);
+      return undefined;
+    }
 
-      // if any field is represented more than once in the libpostal response, treat it as invalid
-      //  and return undefined
-      // _.countBy creates a histogram from parsed, eg: { "road": 2, "city": 1 }
-      if (_.some(_.countBy(parsed, o => o.component), count => count > 1)) {
-        logger.warn(`discarding libpostal parse of '${query}' due to duplicate field assignments`);
-        return undefined;
+    // convert the libpostal input into something that pelias understands
+    const o = parsed.reduce((o, f) => {
+      if (field_mapping.hasOwnProperty(f.component)) {
+        o[field_mapping[f.component]] = f.value;
       }
 
-      // convert the libpostal input into something that pelias understands
-      var o = parsed.reduce(function(o, f) {
-        if (field_mapping.hasOwnProperty(f.component)) {
-          o[field_mapping[f.component]] = f.value;
-        }
-
-        return o;
-      }, {});
-
-      logger.debug('converted: ' + JSON.stringify(o, null, 2));
-
       return o;
+    }, {});
 
-    }
-  };
+    logger.debug('converted: ' + JSON.stringify(o, null, 2));
+
+    return o;
+
+  }
 
 };

@@ -1,5 +1,3 @@
-'use strict';
-
 // validate the WOF importer configuration before continuing
 const peliasConfig = require( 'pelias-config' ).generate(require('./schema'));
 
@@ -8,8 +6,7 @@ const peliasConfig = require( 'pelias-config' ).generate(require('./schema'));
 // This can be changed when addressit goes away and libpostal has become the norm.
 if ('libpostal' === peliasConfig.api.textAnalyzer) {
   console.log('loading libpostal data, this may take a few seconds...');
-  const postal = require('node-postal');
-  module.exports = require('./src/libpostalParser').create(postal.parser.parse_address);
+  module.exports = require('./src/libpostalParser');
 }
 else if ('addressit' === peliasConfig.api.textAnalyzer) {
   module.exports = require('./src/addressItParser');
