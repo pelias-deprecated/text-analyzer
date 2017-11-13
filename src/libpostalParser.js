@@ -19,12 +19,10 @@ const field_mapping = {
   country:        'country'
 };
 
-// wrapper for libpostal that injects the actual parse function for easier
-// testing purposes.  `parse_address` is just a function that in the real world
-// calls libpostal and returns the parsed input.  It's injected since it's
-// libpostal is an external dependency and this pattern makes unit testing much
-// easier by effectively mocking out libpostal.  `parse_address` takes a single
-// string parameter to be parsed and returns an array of the form:
+// return an object that contains a single function called `parse` that calls
+// libpostal with the input query and converts the result to something generic
+// and consumable by pelias.  `parse` takes a single string parameter to be
+// parsed and returns an array of the form:
 //
 // ```
 // [
@@ -65,7 +63,6 @@ const field_mapping = {
 //
 module.exports = {
   parse: query => {
-    // call the parsing function (libpostal)
     const parsed = parse_address(_.deburr(query));
 
     logger.debug('libpostal raw: ' + JSON.stringify(parsed, null, 2));
