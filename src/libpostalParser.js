@@ -64,7 +64,7 @@ const field_mapping = {
 // The Pelias query module is not concerned with unit.
 //
 module.exports = {
-  parse: function parse(query) {
+  parse: query => {
     // call the parsing function (libpostal)
     const parsed = parse_address(_.deburr(query));
 
