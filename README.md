@@ -1,4 +1,4 @@
-> This repository is part of the [Pelias](https://github.com/pelias/pelias) project. Pelias is an open-source, open-data geocoder built by [Mapzen](https://www.mapzen.com/) that also powers [Mapzen Search](https://mapzen.com/projects/search). Our official user documentation is [here](https://mapzen.com/documentation/search/).
+> This repository is part of the [Pelias](https://github.com/pelias/pelias) project. Pelias is an open-source, open-data geocoder originally built by [Mapzen](https://www.mapzen.com/). Our official user documentation is [here](https://github.com/pelias/documentation).
 
 # Pelias Text Analyzer
 
@@ -10,6 +10,8 @@
 ## Overview
 
 Module that performs analysis of a single line of input describing a location, breaking into its constituent parts (street, city, state, country, etc).
+
+**Note: this module has been merged back into [pelias/api](https://github.com/pelias/api) and is now deprecated**
 
 ## Installation
 
