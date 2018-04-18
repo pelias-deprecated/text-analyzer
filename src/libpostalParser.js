@@ -84,7 +84,13 @@ module.exports.create = function create(parse_address) {
       // convert the libpostal input into something that pelias understands
       var o = parsed.reduce(function(o, f) {
         if (field_mapping.hasOwnProperty(f.component)) {
+
+          if (o.hasOwnProperty('postalcode') && f.component === 'postcode' && !o.hasOwnProperty('number')) {
+            logger.warn('overriding dual postalcodes');
+            o.number = o.postalcode;            
+          }
           o[field_mapping[f.component]] = f.value;
+          
         }
 
         return o;
