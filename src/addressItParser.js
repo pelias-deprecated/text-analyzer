@@ -42,6 +42,7 @@ function parse(query) {
                               addressWithAddressParts);
 
   var address_parts  =  [ 'name',
+                          'unit',
                           'number',
                           'street',
                           'city',

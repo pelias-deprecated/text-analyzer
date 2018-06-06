@@ -41,6 +41,10 @@ tape('tests', function(test) {
           value: 'house value'
         },
         {
+          component: 'unit',
+          value: 'unit value'
+        },
+        {
           component: 'house_number',
           value: 'house_number value'
         },
@@ -87,6 +91,7 @@ tape('tests', function(test) {
       island: 'island value',
       category: 'category value',
       query: 'house value',
+      unit: 'unit value',
       number: 'house_number value',
       street: 'road value',
       neighbourhood: 'suburb value',

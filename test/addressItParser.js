@@ -68,6 +68,17 @@ tape('tests', function(test) {
     t.equal(address.state , 'NY', 'parsed state');
     t.end();
   });
+  test.test('valid address, unt', function(t) {
+    var query_string = 'Shop 8, 431 St Kilda Rd Melbourne';
+    var address = parser.parse(query_string);
+
+    t.equal(typeof address, 'object', 'valid object for the address');
+    t.equal(address.unit , '8', 'parsed unit');
+    t.equal(address.number, '431', 'parsed house number');
+    t.equal(address.street, 'St Kilda Rd', 'parsed street');
+    t.deepEqual(address.regions, ['Melbourne'], 'parsed city');
+    t.end();
+  });
   test.test('valid address, house number', function(t) {
     var query_string = '123 main st new york ny';
     var address = parser.parse(query_string);
